@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 .sidebar-content {
     display: flex;
     height: 100%;
@@ -11,9 +13,23 @@
 }
 
 .toolbar {
+    @include mat.button-overrides((text-label-text-size: 24px));
+
     flex: 15;
     align-self: flex-start;
 }
+
+.review-button {
+    @include mat.button-overrides((filled-container-color: var(--mat-sys-primary),
+            filled-container-height: 50px,
+            filled-horizontal-padding: 45px,
+            filled-label-text-size: 20px,
+        ));
+
+    flex: 2;
+    align-self: center;
+}
+
 
 .footer {
     align-self: center;

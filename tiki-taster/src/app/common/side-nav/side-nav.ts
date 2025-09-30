@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
-import { MatDivider } from "@angular/material/divider";
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-side-nav',
-  imports: [MatToolbarModule, RouterLink],
+  imports: [MatToolbarModule, RouterLink, MatButtonModule],
   templateUrl: './side-nav.html',
   styleUrl: './side-nav.scss'
 })
