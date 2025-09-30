@@ -1,12 +1,15 @@
 .sidebar {
     flex: 0 0 200px;
+    border: 1px solid black;
 }
 
 .main-content {
     flex: 1;
 }
 
- .page-container {
-      display: flex;
-      flex-direction: row; /* or column for vertical arrangement */
-    }
+.page-container {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}

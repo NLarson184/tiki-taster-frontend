@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {RouterLink} from '@angular/router';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { RouterLink } from '@angular/router';
+import { MatDivider } from "@angular/material/divider";
 
 @Component({
   selector: 'app-side-nav',
