@@ -1,0 +1,14 @@
+.list-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: flex-start;
+    height: 400px;
+
+    margin: 15px;
+}
+
+.rating {
+    height: 200px;
+    width: 175px;
+}

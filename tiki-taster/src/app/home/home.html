@@ -1,1 +1,15 @@
-<p>home works!</p>
+<h2>Drink List</h2>
+@if (drinkList$ | async; as drinkList) {
+<div class="list-container">
+    @for(drink of drinkList; track drink.id) {
+    <div class="rating">
+        <app-drink-card [drink]="drink"></app-drink-card>
+    </div>
+    } @empty {
+    <p>No ratings found.</p>
+    }
+</div>
+
+} @else {
+<p>Loading Ratings...</p>
+}
