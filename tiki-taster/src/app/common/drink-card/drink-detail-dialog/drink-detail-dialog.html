@@ -1,0 +1,16 @@
+<div class="dialog-container">
+    <div class="header">
+        <h1 mat-dialog-title>{{ drink.name }}</h1>
+        <h4>@ {{ drink.bar.name }}</h4>
+    </div>
+    <div class="user-ratings-section drink-card-section">
+        <span class="drink-card-section-headline">Overall:</span>
+        <app-star-rating [rating]="overall_rating"></app-star-rating>
+    </div>
+    @if(drink.tags.length > 0) {
+    <div class="tag-section drink-card-section">
+        <span class="drink-card-section-headline">Tags:</span>
+        <app-tag-display [tagList]="drink.tags"></app-tag-display>
+    </div>
+    }
+</div>

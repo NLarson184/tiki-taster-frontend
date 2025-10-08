@@ -14,4 +14,14 @@ export class DrinkService {
   getAllDrinks(): Observable<Drink[]> {
     return this.http.get<Drink[]>(`${this.baseUrl}/drinks`);
   }
+
+  calculateOverallRating(drink: Drink): number {
+    if (drink.ratings == null || drink.ratings.length == 0) {
+      return 0;
+    }
+
+    const overallRatings = drink.ratings.map(rating => rating.overall_rating) ?? [];
+    const sum = overallRatings.reduce((a, c) => a + c, 0);
+    return sum / overallRatings.length;
+  }
 }

@@ -1,0 +1,15 @@
+<div class="star-rating">
+    @if(rating() == 0) {
+    <span>Not enough ratings!</span>
+    } @else {
+    @for(filled of ratingStars!.filledStars; track $index) {
+    <mat-icon aria-hidden="false" aria-label="filled star" fontIcon="star"></mat-icon>
+    }
+    @for(filled of ratingStars!.halfStars; track $index) {
+    <mat-icon aria-hidden="false" aria-label="half star" fontIcon="star_half"></mat-icon>
+    }
+    @for(filled of ratingStars!.emptyStars; track $index) {
+    <mat-icon aria-hidden="false" aria-label="empty star" fontIcon="star_border"></mat-icon>
+    }
+    }
+</div>

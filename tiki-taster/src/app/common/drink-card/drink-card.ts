@@ -1,30 +1,46 @@
-import { Component, input } from '@angular/core';
+import { Component, input, inject, OnInit } from '@angular/core';
 import { Drink } from '../../models/drink';
+import { DrinkDetailDialog } from './drink-detail-dialog/drink-detail-dialog';
+import { MatButtonModule } from '@angular/material/button';
+import {
+  MatDialog,
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { DrinkService } from '../../services/drink-service';
 
 @Component({
   selector: 'app-drink-card',
-  imports: [],
+  imports: [MatButtonModule],
   templateUrl: './drink-card.html',
   styleUrl: './drink-card.scss'
 })
-export class DrinkCard {
+export class DrinkCard implements OnInit {
   // Required - The drink for this card
-  drink = input<Drink>();
+  drink = input.required<Drink>();
+
+  // The dialog popup for the drink details
+  readonly dialog = inject(MatDialog);
+  private drinkService = inject(DrinkService);
 
   // The calculated overall rating for this drink.
   // Based on the list of ratings attached to this drink.
-  overallRating: string;
+  overallRating: string = 'Loading...';
 
-  constructor() {
-    this.overallRating = this.calculateOverallRating();
+  ngOnInit() {
+    this.overallRating = this.drinkService.calculateOverallRating(this.drink()!).toString();
   }
 
-  calculateOverallRating(): string {
-    if (this.drink()?.ratings == null || this.drink()?.ratings.length == 0) {
-      return 'N/A';
-    }
-    const overallRatings = this.drink()?.ratings.map(rating => rating.overall_rating) ?? [];
-    const sum = overallRatings.reduce((a, c) => a + c, 0);
-    return (sum / overallRatings.length).toString();
+  openDetailDialog(drink: Drink): void {
+    this.dialog.open(DrinkDetailDialog, {
+      width: '500px',
+      data: {
+        drink: drink
+      },
+    });
   }
 }
