@@ -4,7 +4,7 @@ import { Tag } from './tag';
 
 export interface Drink {
     id: number;
-    name: String;
+    name: string;
     bar: Bar;
     ratings: Rating[];
     tags: Tag[];

@@ -1,4 +1,4 @@
-import { Component, input, OnInit } from '@angular/core';
+import { Component, input, OnInit, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { StarRatingDetails } from './star-rating-details';
 
@@ -11,18 +11,33 @@ import { StarRatingDetails } from './star-rating-details';
 export class StarRating implements OnInit {
   readonly MAX_STAR_VALUE = 5;
 
-  // Decimal rating [0, 5]
-  rating = input.required<number>();
+  // INPUTS
+  readonly = input<boolean>(false);
+  rating = input<number>(0); // Decimal rating [0, 5]
 
-  // The different stars to put in the row
-  ratingStars: StarRatingDetails | undefined;
+  // OUTPUT
+  newRating = output<number>();
+
+  // READONLY Section
+  readonlyRatingStars: StarRatingDetails | undefined;
+
+  // EDITABLE Section
+  possibleStars: number[] = [];
+  currentTrueRating: number = 0;
+  tempHoverRating: number = 0;
 
   ngOnInit() {
-    this.ratingStars = this.calculateStars(this.rating());
+    if (this.readonly()) {
+      this.readonlyRatingStars = this.calculateFractionalStars(this.rating());
+    } else {
+      this.possibleStars = Array(this.MAX_STAR_VALUE).fill(0);
+    }
   }
 
-  // Round down to get the number of full stars
-  private calculateStars(rating: number): StarRatingDetails {
+  // Builds out full, fractional, and empty stars for a decimal readonly rating
+  //
+  // Used when displaying an overall rating, which can be decimal.
+  private calculateFractionalStars(rating: number): StarRatingDetails {
     const filledStars = Array(Math.floor(rating)).fill(0);
     const halfStars = rating % 1 == 0 ? [] : [0]
     const emptyStars = Array(this.MAX_STAR_VALUE - (filledStars.length + halfStars.length)).fill(0);
@@ -32,5 +47,24 @@ export class StarRating implements OnInit {
       halfStars: halfStars,
       emptyStars: emptyStars
     }
+  }
+
+  public getStarIconType(index: number): string {
+    return (index + 1) > this.tempHoverRating ? 'star_border' : 'star';
+  }
+
+  public setHover(rating: number): void {
+    this.tempHoverRating = rating;
+  }
+
+  public resetHover(): void {
+    this.tempHoverRating = this.currentTrueRating;
+  }
+
+  // Output a new rating and set the current rating
+  public setRating(rating: number): void {
+    this.currentTrueRating = rating;
+    this.tempHoverRating = rating;
+    this.newRating.emit(this.currentTrueRating);
   }
 }

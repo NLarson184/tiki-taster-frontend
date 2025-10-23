@@ -2,6 +2,6 @@ import { Drink } from "./drink";
 
 export interface Tag {
     id: number;
-    name: String;
+    name: string;
     drinks: Array<Drink>;
 }

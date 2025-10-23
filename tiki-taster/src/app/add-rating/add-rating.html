@@ -1,1 +1,81 @@
-<p>add-rating works!</p>
+<div>
+    <h1 class="form-header">Let's Capture the Vibe</h1>
+
+    <form class="form-container" [formGroup]="ratingForm" (ngSubmit)="printForm()">
+
+        <!-- Bar Select -->
+        <mat-form-field class="bar-form-field">
+            <mat-label>Bar</mat-label>
+            <mat-select formControlName="barControl" required>
+                @for(bar of barList$ | async; track bar.id) {
+                <mat-option [value]="bar">{{ bar.name }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        @if(ratingForm.controls.barControl.valid) {
+        <!-- Drink Select -->
+        <mat-form-field class="drink-form-field">
+            <mat-label>Drink</mat-label>
+            <input type="text" placeholder="Select a drink or start typing" aria-label="Drink Name" matInput
+                formControlName="drinkControl" [matAutocomplete]="drinkAuto" required>
+            <mat-autocomplete #drinkAuto="matAutocomplete" [displayWith]="drinkDisplayFn">
+                @for(drink of drinkList; track drink.id) {
+                <mat-option [value]="drink">{{ drink.name }}</mat-option>
+                }
+            </mat-autocomplete>
+            <mat-hint>
+                If you can't find your drink, we'll create a new one with your name!
+            </mat-hint>
+        </mat-form-field>
+        }
+
+        @if(ratingForm.controls.drinkControl.valid) {
+        <!-- Rating Controls -->
+        <div class="ratings-section">
+            <h1>Ratings</h1>
+            <div class="rating-row">
+                <h2 class="rating-label">Overall</h2>
+                <app-star-rating class="star-rating-input" [readonly]="false"
+                    (newRating)="setOverallRating($event)"></app-star-rating>
+            </div>
+
+            <div class="rating-row">
+                <h2 class="rating-label">Taste</h2>
+                <app-star-rating class="star-rating-input" [readonly]="false"
+                    (newRating)="setTasteRating($event)"></app-star-rating>
+            </div>
+
+            <div class="rating-row">
+                <h2 class="rating-label">Presentation</h2>
+                <app-star-rating class="star-rating-input" [readonly]="false"
+                    (newRating)="setPresentationRating($event)"></app-star-rating>
+            </div>
+        </div>
+
+        <!-- Tag Input -->
+        <!-- 
+        <mat-form-field>
+            <mat-label>Tags</mat-label>
+            <mat-chip-grid #tagChipGrid aria-label="drink tags" [formControl]="tagControl">
+                @for(tag of selectedTagList(); track tag.id) {
+                <mat-chip-row [editable]="false">
+                    {{ tag.name }}
+                </mat-chip-row>
+                }
+                <input [matChipInputFor]="tagChipGrid" [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+                    [matChipInputAddOnBlur]="addOnBlur" [matAutocomplete]="tagAuto"
+                    (matChipInputTokenEnd)="addTag($event)" />
+                <mat-autocomplete #tagAuto="matAutocomplete">
+                    @for(tag of tagList$ | async; track tag.id) {
+                    <mat-option [value]="tag">{{ tag.name }}</mat-option>
+                    }
+                </mat-autocomplete>
+            </mat-chip-grid>
+        </mat-form-field>
+        -->
+        }
+
+        <button matButton="outlined" type="submit" [disabled]="!ratingForm.valid">Submit Rating</button>
+    </form>
+</div>

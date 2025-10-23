@@ -5,7 +5,7 @@
     </div>
     <div class="user-ratings-section drink-card-section">
         <span class="drink-card-section-headline">Overall:</span>
-        <app-star-rating [rating]="overall_rating"></app-star-rating>
+        <app-star-rating [readonly]="true" [rating]="overall_rating"></app-star-rating>
     </div>
     @if(drink.tags.length > 0) {
     <div class="tag-section drink-card-section">

@@ -1,15 +1,26 @@
-<div class="star-rating">
+@if(readonly()) {
+<div class="readonly-star-rating">
     @if(rating() == 0) {
     <span>Not enough ratings!</span>
     } @else {
-    @for(filled of ratingStars!.filledStars; track $index) {
+    @for(filled of readonlyRatingStars!.filledStars; track $index) {
     <mat-icon aria-hidden="false" aria-label="filled star" fontIcon="star"></mat-icon>
     }
-    @for(filled of ratingStars!.halfStars; track $index) {
+    @for(half of readonlyRatingStars!.halfStars; track $index) {
     <mat-icon aria-hidden="false" aria-label="half star" fontIcon="star_half"></mat-icon>
     }
-    @for(filled of ratingStars!.emptyStars; track $index) {
+    @for(empty of readonlyRatingStars!.emptyStars; track $index) {
     <mat-icon aria-hidden="false" aria-label="empty star" fontIcon="star_border"></mat-icon>
     }
     }
 </div>
+} @else {
+<div class="editable-star-rating">
+    @for(star of possibleStars; track $index; let idx = $index) {
+    <mat-icon aria-hidden="false" aria-label="star rating" (click)="setRating(idx + 1)" (mouseover)="setHover(idx + 1)"
+        (mouseleave)="resetHover()">
+        {{ getStarIconType(idx) }}
+    </mat-icon>
+    }
+</div>
+}
