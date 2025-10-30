@@ -1,0 +1,29 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  margin: 25px 50px;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.form-header {
+  font: var(--mat-sys-display-large);
+  font-weight: bold;
+  color: var(--mat-sys-tertiary);
+}
+
+.login-button {
+  margin: 15px auto;
+}
+
+.social-login-separator {
+  margin: 10px auto;
+}

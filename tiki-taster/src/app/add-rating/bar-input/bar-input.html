@@ -1,0 +1,8 @@
+<mat-form-field>
+  <mat-label>Bar</mat-label>
+  <mat-select formControlName="barControl" required panelClass="ratings-select-dropdown">
+    @for(bar of barList; track $index) {
+    <mat-option [value]="bar">{{ bar }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>

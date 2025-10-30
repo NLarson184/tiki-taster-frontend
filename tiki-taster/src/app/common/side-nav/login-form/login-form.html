@@ -1,0 +1,43 @@
+<div class="login-container">
+  <h1 class="form-header">Who are you?</h1>
+  <form class="form-container" [formGroup]="loginForm" (ngSubmit)="login()">
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input type="email" matInput formControlName="email" />
+      @if (!emailControl.hasError('required') && emailControl.hasError('email')) {
+      <mat-error>Please enter a valid email address</mat-error>
+      } @else if (emailControl.hasError('required')) {
+      <mat-error>Email is <strong>required</strong></mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input type="password" matInput formControlName="password" />
+      @if (passwordControl.hasError('required')) {
+      <mat-error>Password is <strong>required</strong></mat-error>
+      }
+    </mat-form-field>
+    <button
+      class="login-button"
+      type="submit"
+      matButton="filled"
+      [disabled]="loginForm.invalid || isLoading()"
+    >
+      Log In
+    </button>
+  </form>
+
+  <div class="social-login-separator">
+    <span>Or continue with</span>
+  </div>
+
+  <!-- Social Login Buttons -->
+  <app-google-sign-in></app-google-sign-in>
+
+  <!-- Error Message -->
+  @if(errorMessage()) {
+  <mat-error role="alert">
+    {{ errorMessage() }}
+  </mat-error>
+  }
+</div>

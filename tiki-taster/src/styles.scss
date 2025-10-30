@@ -7,12 +7,16 @@
 @use './theme-colors' as tiki-theme;
 
 html {
-  @include mat.theme((color: (primary: tiki-theme.$primary-palette,
+  @include mat.theme(
+    (
+      color: (
+        primary: tiki-theme.$primary-palette,
         tertiary: tiki-theme.$tertiary-palette,
       ),
       typography: 'Indie Flower',
       density: 0,
-    ));
+    )
+  );
 }
 
 body {

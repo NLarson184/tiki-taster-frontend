@@ -1,37 +1,41 @@
 .form-container {
-    display: flex;
+  display: flex;
 
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
 }
 
 .form-header {
-    font: var(--mat-sys-display-large);
-    font-weight: bold;
-    color: var(--mat-sys-tertiary);
+  font: var(--mat-sys-display-large);
+  font-weight: bold;
+  color: var(--mat-sys-tertiary);
 }
 
 .bar-form-field,
 .drink-form-field {
-    width: 50%;
+  width: 50%;
 }
 
 .ratings-section {
-    display: flex;
+  display: flex;
 
-    align-items: center;
-    flex-direction: column;
-    margin-top: 25px;
-    width: 100%;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 25px;
+  width: 100%;
+}
+
+.form-submit-section {
+  margin-top: 20px;
 }
 
 .rating-row {
-    display: flex;
+  display: flex;
 
-    align-items: center;
-    flex-direction: row;
-    gap: 15px;
-    justify-content: space-between;
-    width: 50%;
+  align-items: center;
+  flex-direction: row;
+  gap: 15px;
+  justify-content: space-between;
+  width: 50%;
 }

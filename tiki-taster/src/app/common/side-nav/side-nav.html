@@ -1,25 +1,27 @@
 <div class="sidebar-content">
-    <div class="header">
-        <h1><a routerLink="">Tiki Taster</a></h1>
-    </div>
+  <div class="header">
+    <h1><a routerLink="">Tiki Taster</a></h1>
+  </div>
 
-    <div class="toolbar">
-        <mat-toolbar>
-            <mat-toolbar-row>
-                <span>
-                    <a matButton routerLink="" routerLinkActive="disabled">
-                        Home
-                    </a>
-                </span>
-            </mat-toolbar-row>
-        </mat-toolbar>
-    </div>
+  <div class="toolbar">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <span>
+          <a matButton routerLink="" routerLinkActive="disabled"> Home </a>
+        </span>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </div>
 
-    <div class="review-button">
-        <a matButton="filled" routerLink="add-rating">Add a Rating</a>
-    </div>
+  <div class="review-button">
+    <a matButton="filled" routerLink="add-rating">Add a Rating</a>
+  </div>
 
-    <div class="footer">
-        <h3>Tiki Taster</h3>
-    </div>
+  <div class="footer">
+    @if(isLoggedIn()) {
+    <span>Welcome, {{ userFirstName() }}</span>
+    } @else {
+    <button matButton="elevated" (click)="openLoginDialog()">Login</button>
+    }
+  </div>
 </div>
