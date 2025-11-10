@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environments';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { ICredentials } from '../models/credentials';
 import { firstValueFrom } from 'rxjs';
 import { AuthStore } from './auth-store';
 
@@ -13,11 +14,22 @@ export class AuthService {
   private baseUrl = environment.apiUrl;
 
   /** Standard email/password login */
-  async login(credentials: Credentials): Promise<void> {
-    const loginUrl = `${this.baseUrl}/auth/login`;
+  async login(credentials: ICredentials): Promise<void> {
+    const loginUrl = `${this.baseUrl}/auth/token`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded',
+    });
+    let body = new HttpParams();
+    for (const key in credentials) {
+      if (credentials.hasOwnProperty(key)) {
+        body = body.set(key, (credentials as any)[key]);
+      }
+    }
 
     try {
-      const response = await firstValueFrom(this.http.post<TokenResponse>(loginUrl, credentials));
+      const response = await firstValueFrom(
+        this.http.post<TokenResponse>(loginUrl, body, { headers: headers })
+      );
 
       if (response && response.access_token) {
         // Delegate state update to the AuthStore
@@ -31,7 +43,7 @@ export class AuthService {
     }
   }
 
-  async socialLogin(idToken: string): Promise<void> {
+  async socialLogin(accessToken: string): Promise<boolean> {
     const socialLoginUrl = `${this.baseUrl}/auth/convert-token/`;
 
     try {
@@ -39,14 +51,12 @@ export class AuthService {
         grant_type: 'convert_token',
         client_id: '4ZxwUL4w1k5DosSnOfPzKQLYyPRjj3NaNo3dJmuT',
         backend: 'google-identity',
-        token: idToken,
+        token: accessToken,
       };
 
       const response = await firstValueFrom(this.http.post<TokenResponse>(socialLoginUrl, payload));
 
       if (response && response.access_token) {
-        // The actual email will be returned by the backend after token verification.
-        // We'll use a placeholder for now, but a real response should contain user details.
         this.authStore.setTokens(response);
       } else {
         throw new Error('Invalid token response from server after social login.');
@@ -59,5 +69,7 @@ export class AuthService {
           'Google authentication failed. Token may be invalid or expired.'
       );
     }
+
+    return true;
   }
 }

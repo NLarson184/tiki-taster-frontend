@@ -6,7 +6,7 @@ import { Bar } from '../models/bar';
 import { Drink } from '../models/drink';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BarService {
   private baseUrl = environment.apiUrl;
@@ -14,6 +14,10 @@ export class BarService {
 
   getAllBars(): Observable<Bar[]> {
     return this.http.get<Bar[]>(`${this.baseUrl}/bars`);
+  }
+
+  getBarDetails(barId: number): Observable<Bar> {
+    return this.http.get<Bar>(`${this.baseUrl}/bars/${barId}`);
   }
 
   getDrinksAtBar(barId: number): Observable<Drink[]> {

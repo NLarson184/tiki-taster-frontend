@@ -41,6 +41,9 @@ import { TagService } from '../services/tag-service';
 import { COMMA, ENTER, P } from '@angular/cdk/keycodes';
 import { MatAnchor, MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { NewRating } from '../models/rating';
+import { RatingService } from '../services/rating-service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-add-rating',
@@ -60,6 +63,7 @@ import { MatIcon } from '@angular/material/icon';
     MatButton,
     MatIcon,
     MatChipRemove,
+    RouterLink,
   ],
   templateUrl: './add-rating.html',
   styleUrl: './add-rating.scss',
@@ -68,15 +72,18 @@ export class AddRating implements OnInit {
   barService = inject(BarService);
   drinkService = inject(DrinkService);
   tagService = inject(TagService);
+  ratingService = inject(RatingService);
 
   barList$: Observable<Bar[]>;
   tagList$: BehaviorSubject<Tag[]> = new BehaviorSubject<Tag[]>([]);
   drinkList: Drink[] = [];
 
+  formComplete = signal(false);
+
   // Form Controls
   ratingForm = new FormGroup({
     barControl: new FormControl<Bar | null>(null, [Validators.required]),
-    drinkControl: new FormControl<Drink | null>(null, [Validators.required]),
+    drinkControl: new FormControl<string | null>(null, [Validators.required]),
     overallRatingControl: new FormControl<number>(0, [
       Validators.required,
       Validators.min(1),
@@ -84,7 +91,7 @@ export class AddRating implements OnInit {
     ]),
     tasteRatingControl: new FormControl<number>(0, [Validators.min(1), Validators.max(5)]),
     presentationRatingControl: new FormControl<number>(0, [Validators.min(1), Validators.max(5)]),
-    tagControl: new FormControl<Tag[]>([]),
+    tagControl: new FormControl<string[]>([]),
     tagInputControl: new FormControl<string>(''),
   });
   formOutput = signal<any>(null);
@@ -126,10 +133,6 @@ export class AddRating implements OnInit {
     });
   }
 
-  drinkDisplayFn(drink: Drink): string {
-    return drink?.name ?? '';
-  }
-
   setRatingControl(rating: number, formControlName: string): void {
     this.ratingForm.get(formControlName)?.setValue(rating);
   }
@@ -166,6 +169,20 @@ export class AddRating implements OnInit {
   }
 
   submitForm() {
-    this.formOutput.set(JSON.stringify(this.ratingForm.value, null, 2));
+    // Create a new rating object
+    const newRating: NewRating = {
+      bar_id: this.ratingForm.get('barControl')!.value!.id!,
+      drink_name: this.ratingForm.get('drinkControl')!.value!,
+      overall_rating: this.ratingForm.get('overallRatingControl')!.value!,
+      taste_rating: this.ratingForm.get('tasteRatingControl')?.value ?? undefined,
+      presentation_rating: this.ratingForm.get('presentationRatingControl')?.value ?? undefined,
+      tag_list: this.ratingForm.get('tagControl')!.value ?? [],
+    };
+
+    // this.formOutput.set(JSON.stringify(newRating, null, 2));
+
+    this.ratingService.createRating(newRating).subscribe((success) => {
+      this.formComplete.set(true);
+    });
   }
 }

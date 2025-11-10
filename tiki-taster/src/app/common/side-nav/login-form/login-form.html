@@ -32,7 +32,7 @@
   </div>
 
   <!-- Social Login Buttons -->
-  <app-google-sign-in></app-google-sign-in>
+  <app-google-sign-in (loggedIn)="closeDialog()"></app-google-sign-in>
 
   <!-- Error Message -->
   @if(errorMessage()) {

@@ -17,11 +17,12 @@ import { DrinkService } from '../../services/drink-service';
   selector: 'app-drink-card',
   imports: [MatButtonModule],
   templateUrl: './drink-card.html',
-  styleUrl: './drink-card.scss'
+  styleUrl: './drink-card.scss',
 })
 export class DrinkCard implements OnInit {
   // Required - The drink for this card
   drink = input.required<Drink>();
+  barLinkActive = input<boolean>(true);
 
   // The dialog popup for the drink details
   readonly dialog = inject(MatDialog);
@@ -30,16 +31,21 @@ export class DrinkCard implements OnInit {
   // The calculated overall rating for this drink.
   // Based on the list of ratings attached to this drink.
   overallRating: string = 'Loading...';
+  tasteRating: string = 'Loading...';
+  presentationRating: string = 'Loading...';
 
   ngOnInit() {
-    this.overallRating = this.drinkService.calculateOverallRating(this.drink()!).toString();
+    this.overallRating = this.drink().average_overall_rating?.toString() ?? 'N/A';
+    this.tasteRating = this.drink().average_taste_rating?.toString() ?? 'N/A';
+    this.presentationRating = this.drink().average_presentation_rating?.toString() ?? 'N/A';
   }
 
   openDetailDialog(drink: Drink): void {
     this.dialog.open(DrinkDetailDialog, {
       width: '500px',
       data: {
-        drink: drink
+        drink: drink,
+        barLinkActive: this.barLinkActive(),
       },
     });
   }

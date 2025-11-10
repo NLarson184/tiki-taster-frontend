@@ -7,19 +7,36 @@
     <mat-toolbar>
       <mat-toolbar-row>
         <span>
-          <a matButton routerLink="" routerLinkActive="disabled"> Home </a>
+          @if(currentLink() == '/') {
+          <a matButton="filled" class="link-active"> Home </a>
+          } @else {
+          <a matButton routerLink=""> Home </a>
+          }
         </span>
+      </mat-toolbar-row>
+      <mat-toolbar-row>
+        @if(currentLink() == '/search') {
+        <a matButton="filled" class="link-active"> Search </a>
+        } @else {
+        <a matButton routerLink="search"> Search </a>
+        }
       </mat-toolbar-row>
     </mat-toolbar>
   </div>
 
   <div class="review-button">
+    @if(isLoggedIn() && currentLink() == '/add-rating') {
+    <a matButton="filled" disabled>Add a Rating</a>
+    } @else if(isLoggedIn() && currentLink() != '/add-rating') {
     <a matButton="filled" routerLink="add-rating">Add a Rating</a>
+    } @else {
+    <a matButton="filled" disabled>Add a Rating</a> }
   </div>
 
   <div class="footer">
     @if(isLoggedIn()) {
     <span>Welcome, {{ userFirstName() }}</span>
+    <button matButton (click)="logout()">Log Out</button>
     } @else {
     <button matButton="elevated" (click)="openLoginDialog()">Login</button>
     }

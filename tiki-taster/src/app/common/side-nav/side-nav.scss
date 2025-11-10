@@ -1,46 +1,68 @@
 @use '@angular/material' as mat;
 
 .sidebar-content {
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    align-items: stretch;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .header {
-    flex: 1;
-    align-self: center;
+  flex: 1;
+  align-self: center;
 }
 
 .toolbar {
-    @include mat.button-overrides((text-label-text-size: 24px));
+  @include mat.button-overrides(
+    (
+      text-label-text-size: 24px,
+    )
+  );
 
-    flex: 15;
-    align-self: flex-start;
+  flex: 15;
+  align-self: flex-start;
+}
+
+.link-active {
+  @include mat.button-overrides(
+    (
+      filled-container-color: var(--mat-sys-primary-container),
+      filled-label-text-color: var(--mat-sys-on-primary-container),
+      filled-label-text-size: 24px,
+    )
+  );
+
+  opacity: 75%;
 }
 
 .review-button {
-    @include mat.button-overrides((filled-container-color: var(--mat-sys-primary),
-            filled-container-height: 50px,
-            filled-horizontal-padding: 45px,
-            filled-label-text-size: 20px,
-        ));
+  @include mat.button-overrides(
+    (
+      filled-container-color: var(--mat-sys-primary),
+      filled-disabled-container-color: var(--mat-sys-primary-container),
+      filled-label-text-color: var(--mat-sys-on-primary),
+      filled-disabled-label-text-color: var(--mat-sys-on-primary-container),
+      filled-container-height: 50px,
+      filled-horizontal-padding: 45px,
+      filled-label-text-size: 20px,
+    )
+  );
 
-    flex: 2;
-    align-self: center;
+  flex: 2;
+  align-self: center;
 }
-
 
 .footer {
-    align-self: center;
-    flex: 1;
+  align-self: center;
+  flex: 1;
 }
 
-a,
-a:link,
-a:visited,
-a:hover,
-a:active {
-    text-decoration: none;
-    color: inherit;
+// Stops the header from turning purple
+h1 > a,
+h1 > a:link,
+h1 > a:visited,
+h1 > a:hover,
+h1 > a:active {
+  text-decoration: none;
+  color: inherit;
 }

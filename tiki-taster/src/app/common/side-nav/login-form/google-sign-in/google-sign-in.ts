@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, AfterViewInit, inject } from '@angular/core';
+import { Component, OnInit, NgZone, AfterViewInit, inject, output } from '@angular/core';
 import { environment } from '../../../../../environments/environments';
 import { AuthService } from '../../../../services/auth-service';
 
@@ -14,6 +14,8 @@ declare const google: any;
 export class GoogleSignIn implements AfterViewInit {
   authService = inject(AuthService);
   private readonly GOOGLE_CLIENT_ID = environment.googleClientId;
+
+  readonly loggedIn = output<boolean>();
 
   constructor(private ngZone: NgZone) {}
 
@@ -40,9 +42,6 @@ export class GoogleSignIn implements AfterViewInit {
       text: 'signin_with', // 'signin_with', 'signup_with', 'continue_with'
       width: '300',
     });
-
-    // // Render the One Tap prompt immediately
-    // google.accounts.id.prompt();
   }
 
   /**
@@ -54,13 +53,16 @@ export class GoogleSignIn implements AfterViewInit {
     // to ensure Angular's change detection is triggered after processing
     this.ngZone.run(() => {
       const idToken = response.credential;
-      console.log('Encoded JWT ID token:', idToken);
 
       // Securely send the ID token to your backend API for verification
-      this.authService.socialLogin(idToken);
-
-      // For demonstration:
-      alert('Google Sign-In Successful. ID Token sent to console/backend.');
+      this.authService.socialLogin(idToken).then(
+        (loggedIn) => {
+          this.loggedIn.emit(loggedIn);
+        },
+        (error) => {
+          throw error;
+        }
+      );
     });
   }
 }

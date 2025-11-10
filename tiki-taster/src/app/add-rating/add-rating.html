@@ -1,18 +1,22 @@
-<div>
+<div class="page-container">
+  @if(formComplete()) {
+  <!-- Completed Form -->
+  <h1 class="form-header">Vibe Captured!</h1>
+  <a matButton routerLink="">Return Home</a>
+  } @else {
+  <!-- Incomplete Form -->
   <h1 class="form-header">Let's Capture the Vibe</h1>
 
   <form class="form-container" [formGroup]="ratingForm" (ngSubmit)="submitForm()">
     <!-- Bar Select -->
-    <div class="bar-form-field">
-      <mat-form-field class="bar-form-field">
-        <mat-label>Bar</mat-label>
-        <mat-select formControlName="barControl" required panelClass="ratings-select-dropdown">
-          @for(bar of barList$ | async; track bar.id) {
-          <mat-option [value]="bar">{{ bar.name }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-    </div>
+    <mat-form-field class="bar-form-field">
+      <mat-label>Bar</mat-label>
+      <mat-select formControlName="barControl" required panelClass="ratings-select-dropdown">
+        @for(bar of barList$ | async; track bar.id) {
+        <mat-option [value]="bar">{{ bar.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
 
     @if(ratingForm.controls.barControl.valid) {
     <!-- Drink Select -->
@@ -27,9 +31,9 @@
         [matAutocomplete]="drinkAuto"
         required
       />
-      <mat-autocomplete #drinkAuto="matAutocomplete" [displayWith]="drinkDisplayFn">
+      <mat-autocomplete #drinkAuto="matAutocomplete">
         @for(drink of drinkList; track drink.id) {
-        <mat-option [value]="drink">{{ drink.name }}</mat-option>
+        <mat-option [value]="drink.name">{{ drink.name }}</mat-option>
         }
       </mat-autocomplete>
       <mat-hint> If you can't find your drink, we'll create a new one with your name! </mat-hint>
@@ -93,7 +97,7 @@
           (optionSelected)="autocompleteTagSelected($event); tagInput.value = ''"
         >
           @for(tag of filteredTags(); track tag.id) {
-          <mat-option [value]="tag">{{ tag.name }}</mat-option>
+          <mat-option [value]="tag.name">{{ tag.name }}</mat-option>
           }
         </mat-autocomplete>
       </mat-chip-grid>
@@ -106,7 +110,5 @@
       </button>
     </div>
   </form>
-
-  <h4>Form Output:</h4>
-  <div style="white-space: pre-wrap">{{ formOutput() ?? 'n/a' }}</div>
+  }
 </div>

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Rating } from '../models/rating';
+import { NewRating, Rating } from '../models/rating';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environments';
 import { AuthStore } from './auth-store';
@@ -17,7 +17,8 @@ export class RatingService {
     return this.http.get<Rating[]>(`${this.baseUrl}/ratings`);
   }
 
-  createRating(): void {
+  createRating(newRating: NewRating): Observable<any> {
+    console.log('trying to create mai tai');
     const token = this.authStore.getAccessToken();
 
     // This is where a real Interceptor would take over.
@@ -29,7 +30,9 @@ export class RatingService {
       Authorization: `Bearer ${token}`,
     });
 
-    // This is where we will POST new rating/drink/bar/etc.
-    // Make sure to include header info!
+    console.log('sending the request');
+    return this.http.post(`${this.baseUrl}/ratings/`, newRating, {
+      headers: headers,
+    });
   }
 }

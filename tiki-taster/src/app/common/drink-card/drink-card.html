@@ -1,10 +1,12 @@
 <div class="card">
-    @if(drink(); as drink) {
-    <h3>{{ drink.name }}</h3>
-    <ul>
-        <li><strong>Bar:</strong> {{ drink?.bar?.name }}</li>
-        <li><strong>Overall Rating:</strong> {{ overallRating }}</li>
-    </ul>
-    <button class="detail-button" matButton="filled" (click)="openDetailDialog(drink)">See Details</button>
-    }
+  @if(drink(); as drink) {
+  <h3>{{ drink.name }}</h3>
+  <ul>
+    <li><strong>Bar:</strong> {{ drink?.bar?.name }}</li>
+    <li><strong>Overall Rating:</strong> {{ overallRating }}</li>
+  </ul>
+  <button class="detail-button" matButton="filled" (click)="openDetailDialog(drink)">
+    See Details
+  </button>
+  }
 </div>

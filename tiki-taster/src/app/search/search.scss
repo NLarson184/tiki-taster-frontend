@@ -1,0 +1,26 @@
+.page-container {
+  display: flex;
+
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.page-header {
+  font: var(--mat-sys-display-large);
+  font-weight: bold;
+  color: var(--mat-sys-tertiary);
+  margin-bottom: 5px;
+}
+
+.bar-section {
+  align-self: flex-start;
+}
+
+.drink-section {
+  align-self: flex-start;
+}
+
+.tag-section {
+  align-self: flex-start;
+}

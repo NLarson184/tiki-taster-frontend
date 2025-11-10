@@ -2,7 +2,6 @@ import { Component, effect, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { DrinkCard } from '../common/drink-card/drink-card';
 import { Observable } from 'rxjs';
-import { Rating } from '../models/rating';
 import { DrinkService } from '../services/drink-service';
 import { Drink } from '../models/drink';
 
@@ -10,7 +9,7 @@ import { Drink } from '../models/drink';
   selector: 'app-home',
   imports: [AsyncPipe, DrinkCard],
   templateUrl: './home.html',
-  styleUrl: './home.scss'
+  styleUrl: './home.scss',
 })
 export class Home {
   drinkList$!: Observable<Drink[]>;
@@ -20,6 +19,6 @@ export class Home {
   constructor() {
     effect(() => {
       this.drinkList$ = this.drinkService.getAllDrinks();
-    })
+    });
   }
 }

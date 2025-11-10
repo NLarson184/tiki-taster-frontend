@@ -1,0 +1,21 @@
+<div class="page-container">
+  @if(barDetails() == null) {
+  <h1 class="page-header">Loading Bar...</h1>
+  } @else {
+
+  <!-- Header -->
+  <h1 class="page-header">{{ barDetails()!.name }}</h1>
+
+  <!-- Drink List -->
+  <div class="drink-section">
+    <h2>Drinks at {{ barDetails()!.name }}</h2>
+    <div class="drink-list">
+      @for(drink of drinksAtBar(); track drink.id) {
+      <div class="drink">
+        <app-drink-card [drink]="drink" [barLinkActive]="false"></app-drink-card>
+      </div>
+      }
+    </div>
+  </div>
+  }
+</div>

@@ -7,6 +7,7 @@ import { environment } from '../../../../environments/environments';
 import { MatFormField, MatLabel, MatInput, MatInputModule } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { GoogleSignIn } from './google-sign-in/google-sign-in';
+import { Credentials } from '../../../models/credentials';
 
 @Component({
   selector: 'app-login-form',
@@ -71,7 +72,10 @@ export class LoginForm {
     }
 
     // Convert form to a more structured "Credentials"
-    const credentials = this.loginForm.value as Credentials;
+    const credentials = new Credentials(
+      this.loginForm.get('email')!.value,
+      this.loginForm.get('password')!.value
+    );
 
     try {
       // Call the service, which handles the API request and state update
@@ -94,5 +98,9 @@ export class LoginForm {
         'Code detected in URL. Now exchanging code with DRF backend for JWT...'
       );
     }
+  }
+
+  closeDialog(): void {
+    this.dialogRef.close();
   }
 }

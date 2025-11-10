@@ -1,0 +1,36 @@
+.page-container {
+  display: flex;
+
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.page-header {
+  font: var(--mat-sys-display-large);
+  font-weight: bold;
+  color: var(--mat-sys-tertiary);
+  margin-bottom: 5px;
+}
+
+.drink-section {
+  display: flex;
+
+  flex-direction: column;
+  width: 90%;
+}
+
+.drink-list {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: flex-start;
+  height: 400px;
+
+  margin: 15px;
+}
+
+.drink {
+  height: 200px;
+  width: 175px;
+}
