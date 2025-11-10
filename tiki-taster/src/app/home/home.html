@@ -1,15 +1,18 @@
-<h2>Drink List</h2>
-@if (drinkList$ | async; as drinkList) {
-<div class="list-container">
+<div class="page-container">
+  <h1 class="page-header">{{ currentHeader }}</h1>
+  <h2>Drink List</h2>
+  @if (drinkList$ | async; as drinkList) {
+  <div class="list-container">
     @for(drink of drinkList; track drink.id) {
     <div class="rating">
-        <app-drink-card [drink]="drink"></app-drink-card>
+      <app-drink-card [drink]="drink"></app-drink-card>
     </div>
     } @empty {
     <p>No ratings found.</p>
     }
-</div>
+  </div>
 
-} @else {
-<p>Loading Ratings...</p>
-}
+  } @else {
+  <p>Loading Ratings...</p>
+  }
+</div>

@@ -4,6 +4,7 @@ import { DrinkCard } from '../common/drink-card/drink-card';
 import { Observable } from 'rxjs';
 import { DrinkService } from '../services/drink-service';
 import { Drink } from '../models/drink';
+import { HOME_PAGE_HEADERS } from '../common/constants';
 
 @Component({
   selector: 'app-home',
@@ -16,9 +17,13 @@ export class Home {
 
   private drinkService = inject(DrinkService);
 
+  currentHeader: string;
+
   constructor() {
     effect(() => {
       this.drinkList$ = this.drinkService.getAllDrinks();
     });
+
+    this.currentHeader = HOME_PAGE_HEADERS[Math.floor(Math.random() * HOME_PAGE_HEADERS.length)];
   }
 }
