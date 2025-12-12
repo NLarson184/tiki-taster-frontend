@@ -83,11 +83,18 @@ export class LoginForm {
     try {
       // Call the service, which handles the API request and state update
       await this.authService.login(credentials);
+      await this.authService.getUserData().then((user) => {
+        this.authStore.setUserData(user);
+      });
       this.loginForm.reset();
     } catch (error: any) {
       this.errorMessage.set(error.message || 'An unknown error occurred during login.');
     } finally {
       this.isLoading.set(false);
+    }
+
+    if (this.authStore.isAuthenticated()) {
+      this.logInSuccess();
     }
   }
 

@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environments';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ICredentials } from '../models/credentials';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { AuthStore } from './auth-store';
 
 @Injectable({
@@ -71,5 +71,23 @@ export class AuthService {
     }
 
     return true;
+  }
+
+  async getUserData(): Promise<User> {
+    const token = this.authStore.getAccessToken();
+
+    // This is where a real Interceptor would take over.
+    if (!token) {
+      throw new Error('Authentication token is missing.');
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return await firstValueFrom(
+      this.http.get<User>(`${this.baseUrl}/account/details`, {
+        headers: headers,
+      })
+    );
   }
 }
