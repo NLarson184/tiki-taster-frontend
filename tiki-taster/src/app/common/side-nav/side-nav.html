@@ -36,7 +36,7 @@
   <div class="footer">
     @if(isLoggedIn()) {
     <span>Welcome, {{ userFirstName() }}</span>
-    <button matButton (click)="logout()">Log Out</button>
+    <button matButton (click)="openLogoutDialog()">Log Out</button>
     } @else {
     <button matButton="elevated" (click)="openLoginDialog()">Login</button>
     }

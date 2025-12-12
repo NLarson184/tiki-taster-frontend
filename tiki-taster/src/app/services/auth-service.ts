@@ -49,7 +49,7 @@ export class AuthService {
     try {
       const payload = {
         grant_type: 'convert_token',
-        client_id: '4ZxwUL4w1k5DosSnOfPzKQLYyPRjj3NaNo3dJmuT',
+        client_id: environment.djangoClientId,
         backend: 'google-identity',
         token: accessToken,
       };

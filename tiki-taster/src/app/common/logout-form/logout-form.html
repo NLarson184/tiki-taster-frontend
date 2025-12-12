@@ -1,0 +1,12 @@
+<div class="logout-container">
+  @if(!isLoggedOut()) {
+  <h1>Are you sure you want to log out?</h1>
+  <div class="choice-container">
+    <button matButton="outlined">Cancel</button>
+    <button matButton="filled" (click)="logOut()">Log Out</button>
+  </div>
+  } @else {
+  <h1>Logging you out...</h1>
+  <mat-spinner [diameter]="30"></mat-spinner>
+  }
+</div>

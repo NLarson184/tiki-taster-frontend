@@ -24,6 +24,7 @@ export class Home {
       this.drinkList$ = this.drinkService.getAllDrinks();
     });
 
+    // Load in a random header message
     this.currentHeader = HOME_PAGE_HEADERS[Math.floor(Math.random() * HOME_PAGE_HEADERS.length)];
   }
 }

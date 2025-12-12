@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { MatDialogRef } from '@angular/material/dialog';
 import { environment } from '../../../../environments/environments';
 import { MatFormField, MatLabel, MatInput, MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButton } from '@angular/material/button';
 import { GoogleSignIn } from './google-sign-in/google-sign-in';
 import { Credentials } from '../../../models/credentials';
@@ -15,6 +16,7 @@ import { Credentials } from '../../../models/credentials';
     ReactiveFormsModule,
     MatInputModule,
     MatFormField,
+    MatProgressSpinnerModule,
     MatLabel,
     MatButton,
     MatInput,
@@ -35,6 +37,7 @@ export class LoginForm {
 
   loginForm: FormGroup;
   isLoading = signal(false);
+  isLoggedIn = signal(false);
   errorMessage = signal<string | null>(null);
 
   constructor() {
@@ -98,6 +101,15 @@ export class LoginForm {
         'Code detected in URL. Now exchanging code with DRF backend for JWT...'
       );
     }
+  }
+
+  // Trigger log in success message and close dialog after delay
+  logInSuccess(): void {
+    this.isLoggedIn.set(true);
+
+    setTimeout(() => {
+      this.closeDialog();
+    }, 2000);
   }
 
   closeDialog(): void {

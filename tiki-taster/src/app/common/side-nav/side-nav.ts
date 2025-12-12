@@ -6,6 +6,7 @@ import { AuthStore } from '../../services/auth-store';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginForm } from './login-form/login-form';
 import { filter } from 'rxjs';
+import { LogoutForm } from '../logout-form/logout-form';
 
 @Component({
   selector: 'app-side-nav',
@@ -32,13 +33,9 @@ export class SideNav {
 
   openLoginDialog(): void {
     const dialogRef = this.dialog.open(LoginForm);
-
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
-    });
   }
 
-  logout(): void {
-    this.authStore.logout();
+  openLogoutDialog(): void {
+    const dialogRef = this.dialog.open(LogoutForm);
   }
 }

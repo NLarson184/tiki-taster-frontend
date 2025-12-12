@@ -10,7 +10,9 @@ export interface Rating {
 
 // Uses Python naming (SNAKE_CASE)
 export interface NewRating {
-  bar_id: number;
+  bar_id: string;
+  bar_name: string;
+  bar_address: string;
   drink_name: string;
   overall_rating: number;
   taste_rating: number | undefined;

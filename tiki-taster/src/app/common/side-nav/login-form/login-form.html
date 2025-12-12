@@ -1,4 +1,5 @@
 <div class="login-container">
+  @if(!isLoggedIn()) {
   <h1 class="form-header">Who are you?</h1>
   <form class="form-container" [formGroup]="loginForm" (ngSubmit)="login()">
     <mat-form-field>
@@ -32,12 +33,15 @@
   </div>
 
   <!-- Social Login Buttons -->
-  <app-google-sign-in (loggedIn)="closeDialog()"></app-google-sign-in>
+  <app-google-sign-in (loggedIn)="logInSuccess()"></app-google-sign-in>
 
   <!-- Error Message -->
   @if(errorMessage()) {
   <mat-error role="alert">
     {{ errorMessage() }}
   </mat-error>
+  } } @else if(isLoggedIn()) {
+  <h1>Tiki times await!</h1>
+  <mat-spinner [diameter]="30"></mat-spinner>
   }
 </div>

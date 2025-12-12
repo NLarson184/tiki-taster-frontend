@@ -22,12 +22,12 @@ export class BarComponent {
 
   constructor() {
     this.activatedRoute.params.subscribe((params) => {
-      this.loadBarDetails(parseInt(params['id']));
+      this.loadBarDetails(params['id']);
     });
   }
 
-  private loadBarDetails(barId: number) {
-    if (barId == Number.NaN) {
+  private loadBarDetails(barId: string) {
+    if (!barId) {
       return;
     }
 

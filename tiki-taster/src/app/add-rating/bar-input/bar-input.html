@@ -1,8 +1,27 @@
 <mat-form-field>
   <mat-label>Bar</mat-label>
-  <mat-select formControlName="barControl" required panelClass="ratings-select-dropdown">
-    @for(bar of barList; track $index) {
-    <mat-option [value]="bar">{{ bar }}</mat-option>
+  <input
+    type="text"
+    placeholder="Start typing..."
+    aria-label="Bar Search"
+    matInput
+    [matAutocomplete]="auto"
+    (input)="onBarSearchInputChange($event.target.value)"
+  />
+
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    requireSelection
+    [displayWith]="barDisplayFn"
+    (optionSelected)="onBarSelected($event.option.value)"
+  >
+    @for(bar of filteredBars$ | async; track bar.fsq_place_id) {
+    <mat-option [value]="bar">
+      <div class="bar-result">
+        <span class="bar-name">{{ bar.name }} -- </span>
+        <small class="bar-address">{{ bar.formatted_address }}</small>
+      </div>
+    </mat-option>
     }
-  </mat-select>
+  </mat-autocomplete>
 </mat-form-field>

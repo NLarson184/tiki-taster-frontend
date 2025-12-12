@@ -25,7 +25,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { BarService } from '../services/bar-service';
 import { DrinkService } from '../services/drink-service';
 import { Bar } from '../models/bar';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {
+  BehaviorSubject,
+  debounceTime,
+  distinctUntilChanged,
+  Observable,
+  Subject,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { Drink } from '../models/drink';
 import { AsyncPipe } from '@angular/common';
 import { StarRating } from '../common/star-rating/star-rating';
@@ -44,6 +52,8 @@ import { MatIcon } from '@angular/material/icon';
 import { NewRating } from '../models/rating';
 import { RatingService } from '../services/rating-service';
 import { RouterLink } from '@angular/router';
+import { BarSearchResult } from '../models/bar-search-result';
+import { BarInput } from './bar-input/bar-input';
 
 @Component({
   selector: 'app-add-rating',
@@ -64,6 +74,7 @@ import { RouterLink } from '@angular/router';
     MatIcon,
     MatChipRemove,
     RouterLink,
+    BarInput,
   ],
   templateUrl: './add-rating.html',
   styleUrl: './add-rating.scss',
@@ -75,15 +86,17 @@ export class AddRating implements OnInit {
   ratingService = inject(RatingService);
 
   barList$: Observable<Bar[]>;
+  drinkList$: Observable<Drink[]>;
   tagList$: BehaviorSubject<Tag[]> = new BehaviorSubject<Tag[]>([]);
-  drinkList: Drink[] = [];
 
   formComplete = signal(false);
 
   // Form Controls
   ratingForm = new FormGroup({
-    barControl: new FormControl<Bar | null>(null, [Validators.required]),
-    drinkControl: new FormControl<string | null>(null, [Validators.required]),
+    barControl: new FormControl<BarSearchResult | null>(null, [Validators.required]),
+    drinkControl: new FormControl<string | null>({ value: null, disabled: true }, [
+      Validators.required,
+    ]),
     overallRatingControl: new FormControl<number>(0, [
       Validators.required,
       Validators.min(1),
@@ -95,6 +108,9 @@ export class AddRating implements OnInit {
     tagInputControl: new FormControl<string>(''),
   });
   formOutput = signal<any>(null);
+
+  // Bar/Drink input details
+  selectedBarForDrinkList$ = new Subject<string>();
 
   // Tag chip input details
   readonly currentTag = model('');
@@ -109,28 +125,29 @@ export class AddRating implements OnInit {
   readonly separatorKeyCodes = [ENTER, COMMA] as const;
 
   constructor(private cd: ChangeDetectorRef) {
+    // When the bar is selected, load the known drinks at this bar
+    this.drinkList$ = this.selectedBarForDrinkList$.pipe(
+      switchMap((placeId: string) => this.barService.getDrinksAtBar(placeId))
+    );
+
     this.barList$ = this.barService.getAllBars();
     this.tagService.getAllTags().subscribe((tagList) => {
       this.tagList$.next(tagList);
     });
   }
 
-  ngOnInit() {
-    this.ratingForm.controls.barControl.valueChanges.subscribe((selectedBar) => {
-      if (!selectedBar) {
-        return;
-      }
+  ngOnInit() {}
 
-      // Update the drink list and clear the current selected drink when the bar changes.
-      this.updateDrinkList(selectedBar!.id);
-      this.ratingForm.controls.drinkControl.setValue(null);
-    });
-  }
+  onBarSelected(selectedBar: BarSearchResult): void {
+    // Enable the input since we have a bar now
+    this.ratingForm.controls.drinkControl.enable();
 
-  updateDrinkList(barId: number): void {
-    this.barService.getDrinksAtBar(barId).subscribe((value) => {
-      this.drinkList = value;
-    });
+    // Fill in the bar form control and trigger the drink list search
+    this.ratingForm.controls.barControl.setValue(selectedBar);
+    this.selectedBarForDrinkList$.next(selectedBar.fsq_place_id);
+
+    // Reset the drink input since the bar has changed
+    this.ratingForm.controls.drinkControl.setValue(null);
   }
 
   setRatingControl(rating: number, formControlName: string): void {
@@ -169,9 +186,12 @@ export class AddRating implements OnInit {
   }
 
   submitForm() {
+    let barObject = this.ratingForm.get('barControl')!.value!;
     // Create a new rating object
     const newRating: NewRating = {
-      bar_id: this.ratingForm.get('barControl')!.value!.id!,
+      bar_id: barObject.fsq_place_id!,
+      bar_name: barObject.name!,
+      bar_address: barObject.formatted_address!,
       drink_name: this.ratingForm.get('drinkControl')!.value!,
       overall_rating: this.ratingForm.get('overallRatingControl')!.value!,
       taste_rating: this.ratingForm.get('tasteRatingControl')?.value ?? undefined,
