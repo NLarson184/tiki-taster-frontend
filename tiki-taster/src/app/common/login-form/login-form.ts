@@ -111,12 +111,18 @@ export class LoginForm {
   }
 
   // Trigger log in success message and close dialog after delay
-  logInSuccess(): void {
+  async logInSuccess(): Promise<void> {
+    // Check if we have basic user data and populate if not
+    if (this.authStore.getUserFirstName() == null) {
+      await this.authService.getUserData().then((user) => {
+        this.authStore.setUserData(user);
+      });
+    }
     this.isLoggedIn.set(true);
 
     setTimeout(() => {
       this.closeDialog();
-    }, 2000);
+    }, 1000);
   }
 
   closeDialog(): void {

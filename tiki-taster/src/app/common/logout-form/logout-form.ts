@@ -28,6 +28,6 @@ export class LogoutForm {
       this.authStore.logout();
       this.router.navigate(['']);
       this.dialogRef.close();
-    }, 2000);
+    }, 1000);
   }
 }
