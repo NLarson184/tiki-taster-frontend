@@ -18,21 +18,11 @@ export class RatingService {
   }
 
   createRating(newRating: NewRating): Observable<any> {
-    console.log('trying to create mai tai');
-    const token = this.authStore.getAccessToken();
-
-    // This is where a real Interceptor would take over.
-    if (!token) {
+    // This is also enforced on the back-end
+    if (!this.authStore.isAuthenticated) {
       throw new Error('Authentication token is missing.');
     }
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    console.log('sending the request');
-    return this.http.post(`${this.baseUrl}/ratings/`, newRating, {
-      headers: headers,
-    });
+    return this.http.post(`${this.baseUrl}/ratings/`, newRating);
   }
 }

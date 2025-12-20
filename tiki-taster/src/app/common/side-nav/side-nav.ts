@@ -4,7 +4,7 @@ import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthStore } from '../../services/auth-store';
 import { MatDialog } from '@angular/material/dialog';
-import { LoginForm } from './login-form/login-form';
+import { LoginForm } from '../login-form/login-form';
 import { filter } from 'rxjs';
 import { LogoutForm } from '../logout-form/logout-form';
 

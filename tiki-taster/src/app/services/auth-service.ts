@@ -81,13 +81,22 @@ export class AuthService {
       throw new Error('Authentication token is missing.');
     }
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return await firstValueFrom(
-      this.http.get<User>(`${this.baseUrl}/account/details`, {
-        headers: headers,
+    return await firstValueFrom(this.http.get<User>(`${this.baseUrl}/account/details`));
+  }
+
+  // Revokes all the tokens attached to the current logged in user.
+  async logout(): Promise<void> {
+    if (!this.authStore.isAuthenticated) {
+      return;
+    }
+
+    firstValueFrom(
+      this.http.post(`${this.baseUrl}/auth/invalidate-sessions`, {
+        client_id: environment.djangoClientId,
       })
-    );
+    ).finally(() => {
+      // Clear out the values from the local cache even if we fail to reject the tokens.
+      this.authStore.logout();
+    });
   }
 }

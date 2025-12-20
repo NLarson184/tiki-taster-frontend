@@ -1,6 +1,6 @@
 import { Component, OnInit, NgZone, AfterViewInit, inject, output } from '@angular/core';
-import { environment } from '../../../../../environments/environments';
-import { AuthService } from '../../../../services/auth-service';
+import { environment } from '../../../../environments/environments';
+import { AuthService } from '../../../services/auth-service';
 
 // IMPORTANT: Declare the global 'google' object
 declare const google: any;

@@ -1,14 +1,14 @@
 import { Component, inject, signal } from '@angular/core';
-import { AuthStore } from '../../../services/auth-store';
-import { AuthService } from '../../../services/auth-service';
+import { AuthStore } from '../../services/auth-store';
+import { AuthService } from '../../services/auth-service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { environment } from '../../../../environments/environments';
+import { environment } from '../../../environments/environments';
 import { MatFormField, MatLabel, MatInput, MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButton } from '@angular/material/button';
 import { GoogleSignIn } from './google-sign-in/google-sign-in';
-import { Credentials } from '../../../models/credentials';
+import { Credentials } from '../../models/credentials';
 
 @Component({
   selector: 'app-login-form',
