@@ -1,1 +1,53 @@
-<p>create-account-form works!</p>
+<div class="create-account-container">
+  @if(!isLoggedIn()) {
+
+  <h1 class="form-header">Who are you?</h1>
+  <form class="form-container" [formGroup]="createAccountForm" (ngSubmit)="createAccount()">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input type="text" matInput formControlName="name" />
+      @if (nameControl.hasError('required')) {
+      <mat-error>Name is <strong>required</strong></mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input type="email" matInput formControlName="email" />
+      @if (!emailControl.hasError('required') && emailControl.hasError('email')) {
+      <mat-error>Please enter a valid email address</mat-error>
+      } @else if (emailControl.hasError('required')) {
+      <mat-error>Email is <strong>required</strong></mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input type="password" matInput formControlName="password" />
+      @if (passwordControl.hasError('required')) {
+      <mat-error>Password is <strong>required</strong></mat-error>
+      }
+    </mat-form-field>
+    <mat-checkbox formControlName="ageVerification">Are you over 21?</mat-checkbox>
+    @if(ageVerificationControl.hasError('required')) {
+    <mat-error>Must be at least 21 to create an account</mat-error>
+    }
+    <button
+      class="create-account-button"
+      type="submit"
+      matButton="filled"
+      [disabled]="createAccountForm.invalid"
+    >
+      Create an Account
+    </button>
+  </form>
+
+  <div class="create-account-separator">
+    <span>
+      Already have an account?
+      <button matButton="text" (click)="switchToLogin()">Log in instead</button>
+    </span>
+  </div>
+  } @else if(isLoggedIn()) {
+  <h1>Welcome to the club!</h1>
+  <mat-spinner [diameter]="30"></mat-spinner>
+  }
+</div>

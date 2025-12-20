@@ -45,8 +45,6 @@ export class LoginForm {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
     });
-
-    this.authStore.isAuthenticated;
   }
 
   ngOnInit(): void {
@@ -123,6 +121,10 @@ export class LoginForm {
     setTimeout(() => {
       this.closeDialog();
     }, 1000);
+  }
+
+  switchToCreate(): void {
+    this.dialogRef.close('openCreate');
   }
 
   closeDialog(): void {

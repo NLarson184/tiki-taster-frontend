@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { LoginForm } from '../login-form/login-form';
 import { filter } from 'rxjs';
 import { LogoutForm } from '../logout-form/logout-form';
+import { CreateAccountForm } from '../create-account-form/create-account-form';
 
 @Component({
   selector: 'app-side-nav',
@@ -33,6 +34,22 @@ export class SideNav {
 
   openLoginDialog(): void {
     const dialogRef = this.dialog.open(LoginForm);
+
+    dialogRef.afterClosed().subscribe((reason) => {
+      if (reason == 'openCreate') {
+        this.openCreateDialog();
+      }
+    });
+  }
+
+  openCreateDialog(): void {
+    const dialogRef = this.dialog.open(CreateAccountForm);
+
+    dialogRef.afterClosed().subscribe((reason) => {
+      if (reason == 'openLogin') {
+        this.openLoginDialog();
+      }
+    });
   }
 
   openLogoutDialog(): void {

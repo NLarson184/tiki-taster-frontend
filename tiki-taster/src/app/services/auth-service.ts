@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environments';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { ICredentials } from '../models/credentials';
+import { Credentials, ICredentials } from '../models/credentials';
 import { firstValueFrom, Observable } from 'rxjs';
 import { AuthStore } from './auth-store';
 
@@ -12,6 +12,27 @@ export class AuthService {
   private http = inject(HttpClient);
   private authStore = inject(AuthStore);
   private baseUrl = environment.apiUrl;
+
+  async createAccount(user: User): Promise<any> {
+    const createAccountUrl = `${this.baseUrl}/account/register`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    let body = {
+      email: user.email,
+      password: user.password,
+      name: user.name,
+    };
+
+    var response = await firstValueFrom(
+      this.http.post<any>(createAccountUrl, body, { headers: headers })
+    );
+
+    if (!response) {
+      throw new Error('Could not create an account. Please try again later.');
+    }
+  }
 
   /** Standard email/password login */
   async login(credentials: ICredentials): Promise<void> {

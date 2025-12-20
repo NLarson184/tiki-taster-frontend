@@ -28,12 +28,19 @@
     </button>
   </form>
 
-  <div class="social-login-separator">
+  <div class="login-separator">
     <span>Or continue with</span>
   </div>
 
   <!-- Social Login Buttons -->
   <app-google-sign-in (loggedIn)="logInSuccess()"></app-google-sign-in>
+
+  <div class="create-account-separator">
+    <span>
+      Don't have an account?
+      <button matButton="text" (click)="switchToCreate()">Create an account</button>
+    </span>
+  </div>
 
   <!-- Error Message -->
   @if(errorMessage()) {

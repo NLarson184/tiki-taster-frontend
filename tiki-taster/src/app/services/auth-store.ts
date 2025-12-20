@@ -40,30 +40,16 @@ export class AuthStore {
     this._accessToken.set(response.access_token);
     this._refreshToken.set(response.refresh_token);
 
-    // // Get the user details (querying back end if necessary)
-    // if (response.user.email) {
-    //   this._userEmail.set(response.user.email);
-    //   this._firstName.set(response.user.first_name);
-    // } else {
-    //   // Query the back end for more user data
-    //   this.authService.getUserData().then((user) => {
-    //     this._userEmail.set(user.email);
-    //     this._firstName.set(user.first_name);
-    //   });
-    // }
-
     sessionStorage.setItem('access_token', response.access_token);
     sessionStorage.setItem('refresh_token', response.refresh_token);
-    // sessionStorage.setItem('user_email', response.user.email);
-    // sessionStorage.setItem('user_first_name', response.user.first_name);
   }
 
   setUserData(user: User) {
     this._userEmail.set(user.email);
-    this._firstName.set(user.first_name);
+    this._firstName.set(user.name);
 
     sessionStorage.setItem('user_email', user.email);
-    sessionStorage.setItem('user_first_name', user.first_name);
+    sessionStorage.setItem('user_first_name', user.name);
   }
 
   /** Gets the current access token for interceptors */
