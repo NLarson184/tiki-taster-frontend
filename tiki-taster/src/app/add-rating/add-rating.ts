@@ -54,6 +54,7 @@ import { RatingService } from '../services/rating-service';
 import { RouterLink } from '@angular/router';
 import { BarSearchResult } from '../models/bar-search-result';
 import { BarInput } from './bar-input/bar-input';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-add-rating',
@@ -123,6 +124,9 @@ export class AddRating implements OnInit {
   });
   readonly selectedTags = signal<string[]>([]);
   readonly separatorKeyCodes = [ENTER, COMMA] as const;
+
+  // Error States
+  duplicateDrinkReview = signal(false);
 
   constructor(private cd: ChangeDetectorRef) {
     // When the bar is selected, load the known drinks at this bar
@@ -201,8 +205,15 @@ export class AddRating implements OnInit {
 
     // this.formOutput.set(JSON.stringify(newRating, null, 2));
 
-    this.ratingService.createRating(newRating).subscribe((success) => {
-      this.formComplete.set(true);
+    this.ratingService.createRating(newRating).subscribe({
+      complete: () => this.formComplete.set(true),
+      error: (error: HttpErrorResponse) => {
+        var errorDetail: string = error.error.detail.toString();
+        console.log(errorDetail);
+        if (errorDetail == 'Duplicate drink/bar combo.') {
+          this.duplicateDrinkReview.set(true);
+        }
+      },
     });
   }
 }

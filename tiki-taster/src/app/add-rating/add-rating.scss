@@ -13,7 +13,7 @@
   color: var(--mat-sys-tertiary);
 }
 
-.bar-form-field,
+// .bar-form-field,
 .drink-form-field {
   width: 50%;
 }
@@ -39,4 +39,11 @@
   gap: 15px;
   justify-content: space-between;
   width: 50%;
+}
+
+.error-section {
+  margin: 15px;
+  padding: 15px;
+  border: 1px solid var(--mat-sys-error);
+  background-color: var(--mat-sys-error-container);
 }

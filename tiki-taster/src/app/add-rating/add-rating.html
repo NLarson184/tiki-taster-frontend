@@ -102,5 +102,13 @@
       </button>
     </div>
   </form>
+
+  <div class="error-section">
+    @if(duplicateDrinkReview()) {
+    <mat-error role="alert">
+      <strong>Sorry! You can't rate this bar's drink more than once!</strong>
+    </mat-error>
+    }
+  </div>
   }
 </div>
