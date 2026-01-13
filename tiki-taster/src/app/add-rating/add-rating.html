@@ -104,10 +104,6 @@
   </form>
 
   @if(duplicateDrinkReview()) {
-  <div class="error-section">
-    <mat-error role="alert">
-      <strong>Sorry! You can't rate this bar's drink more than once!</strong>
-    </mat-error>
-  </div>
+  <app-error-container [errorMessage]="duplicateDrinkErrorMessage"></app-error-container>
   } }
 </div>

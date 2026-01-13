@@ -55,6 +55,7 @@ import { RouterLink } from '@angular/router';
 import { BarSearchResult } from '../models/bar-search-result';
 import { BarInput } from './bar-input/bar-input';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorContainer } from '../common/error-container/error-container';
 
 @Component({
   selector: 'app-add-rating',
@@ -76,6 +77,7 @@ import { HttpErrorResponse } from '@angular/common/http';
     MatChipRemove,
     RouterLink,
     BarInput,
+    ErrorContainer,
   ],
   templateUrl: './add-rating.html',
   styleUrl: './add-rating.scss',
@@ -127,6 +129,7 @@ export class AddRating implements OnInit {
 
   // Error States
   duplicateDrinkReview = signal(false);
+  duplicateDrinkErrorMessage = "Sorry! You can't rate the same drink at a bar more than once.";
 
   constructor(private cd: ChangeDetectorRef) {
     // When the bar is selected, load the known drinks at this bar

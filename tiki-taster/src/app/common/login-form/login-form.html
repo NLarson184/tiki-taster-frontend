@@ -44,9 +44,7 @@
 
   <!-- Error Message -->
   @if(errorMessage()) {
-  <mat-error role="alert">
-    {{ errorMessage() }}
-  </mat-error>
+  <app-error-container [errorMessage]="errorMessage()!"></app-error-container>
   } } @else if(isLoggedIn()) {
   <h1>Tiki times await!</h1>
   <mat-spinner [diameter]="30"></mat-spinner>

@@ -9,6 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButton } from '@angular/material/button';
 import { GoogleSignIn } from './google-sign-in/google-sign-in';
 import { Credentials } from '../../models/credentials';
+import { ErrorContainer } from '../error-container/error-container';
 
 @Component({
   selector: 'app-login-form',
@@ -21,6 +22,7 @@ import { Credentials } from '../../models/credentials';
     MatButton,
     MatInput,
     GoogleSignIn,
+    ErrorContainer,
   ],
   templateUrl: './login-form.html',
   styleUrl: './login-form.scss',

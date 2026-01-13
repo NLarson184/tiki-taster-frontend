@@ -60,7 +60,9 @@ export class AuthService {
       }
     } catch (error: any) {
       console.error('Login error:', error);
-      throw new Error(error.error?.detail || 'Login failed. Check credentials or server status.');
+      throw new Error(
+        error.error?.detail || 'Login failed. Double check your credentials and try again.'
+      );
     }
   }
 
