@@ -1,109 +1,139 @@
 <div class="page-container">
-  @if(formComplete()) {
-  <!-- Completed Form -->
-  <h1 class="form-header">Vibe Captured!</h1>
-  <a matButton routerLink="">Return Home</a>
+  @if (formComplete()) {
+    <!-- Completed Form -->
+    <h1 class="form-header">Vibe Captured!</h1>
+    <a matButton routerLink="">Return Home</a>
   } @else {
-  <!-- Incomplete Form -->
-  <h1 class="form-header">Let's Capture the Vibe</h1>
+    <!-- Incomplete Form -->
+    <h1 class="form-header">Let's Capture the Vibe</h1>
 
-  <form class="form-container" [formGroup]="ratingForm" (ngSubmit)="submitForm()">
-    <!-- Bar Select -->
-    <app-bar-input (selectedBar)="onBarSelected($event)"></app-bar-input>
+    <form class="form-container" [formGroup]="ratingForm" (ngSubmit)="submitForm()">
+      <h1>Where'd You Find This Drink?</h1>
+      <!-- Bar Select -->
+      <app-bar-input (selectedBar)="onBarSelected($event)"></app-bar-input>
 
-    <!-- Drink Select -->
-    <mat-form-field class="drink-form-field">
-      <mat-label>Drink</mat-label>
-      <input
-        type="text"
-        placeholder="Select a drink or start typing"
-        aria-label="Drink Name"
-        matInput
-        formControlName="drinkControl"
-        [matAutocomplete]="drinkAuto"
-        required
-      />
-      <mat-autocomplete #drinkAuto="matAutocomplete">
-        @for(drink of drinkList$ | async; track drink.id) {
-        <mat-option [value]="drink.name">{{ drink.name }}</mat-option>
-        }
-      </mat-autocomplete>
-      <mat-hint> If you can't find your drink, we'll create a new one with your name! </mat-hint>
-    </mat-form-field>
-    @if(ratingForm.controls.drinkControl.valid) {
-    <!-- Rating Controls -->
-    <div class="ratings-section">
-      <h1>Ratings</h1>
-      <div class="rating-row">
-        <h2 class="rating-label">Overall</h2>
-        <app-star-rating
-          class="star-rating-input"
-          (newRating)="setRatingControl($event, 'overallRatingControl')"
-          [readonly]="false"
-        ></app-star-rating>
-      </div>
-
-      <div class="rating-row">
-        <h2 class="rating-label">Taste</h2>
-        <app-star-rating
-          class="star-rating-input"
-          (newRating)="setRatingControl($event, 'tasteRatingControl')"
-          [readonly]="false"
-        ></app-star-rating>
-      </div>
-
-      <div class="rating-row">
-        <h2 class="rating-label">Presentation</h2>
-        <app-star-rating
-          class="star-rating-input"
-          (newRating)="setRatingControl($event, 'presentationRatingControl')"
-          [readonly]="false"
-        ></app-star-rating>
-      </div>
-    </div>
-
-    <!-- Tag Input -->
-    <mat-form-field>
-      <mat-label>Tags</mat-label>
-      <mat-chip-grid #tagChipGrid aria-label="drink tags" formControlName="tagControl">
-        @for(tag of selectedTags(); track $index) {
-        <mat-chip-row (removed)="removeTag(tag)">
-          {{ tag }}
-          <button matChipRemove>
-            <mat-icon>cancel</mat-icon>
-          </button>
-        </mat-chip-row>
-        }
+      <!-- Drink Select -->
+      <mat-form-field class="drink-form-field">
+        <mat-label>Drink</mat-label>
         <input
-          name="currentTag"
-          placeholder="Add a tag..."
-          #tagInput
-          formControlName="tagInputControl"
-          [matChipInputFor]="tagChipGrid"
-          [matAutocomplete]="tagAuto"
-          [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
-          (matChipInputTokenEnd)="addTag($event); tagInput.value = ''"
+          type="text"
+          placeholder="Select a drink or start typing"
+          aria-label="Drink Name"
+          matInput
+          formControlName="drinkControl"
+          [matAutocomplete]="drinkAuto"
+          required
         />
-        <mat-autocomplete
-          #tagAuto="matAutocomplete"
-          (optionSelected)="autocompleteTagSelected($event); tagInput.value = ''"
-        >
-          @for(tag of filteredTags(); track tag.id) {
-          <mat-option [value]="tag.name">{{ tag.name }}</mat-option>
+        <mat-autocomplete #drinkAuto="matAutocomplete">
+          @for (drink of drinkList$ | async; track drink.id) {
+            <mat-option [value]="drink.name">{{ drink.name }}</mat-option>
           }
         </mat-autocomplete>
-      </mat-chip-grid>
-    </mat-form-field>
+        <mat-hint> If you can't find your drink, we'll create a new one with your name! </mat-hint>
+      </mat-form-field>
+      @if (ratingForm.controls.drinkControl.valid) {
+        <!-- Rating Controls -->
+        <div class="ratings-section">
+          <h1>Let's Get Specific</h1>
+          <div class="rating-row">
+            <h2 class="rating-label">Overall</h2>
+            <app-star-rating
+              class="star-rating-input"
+              (newRating)="setRatingControl($event, 'overallRatingControl')"
+              [readonly]="false"
+            ></app-star-rating>
+          </div>
+
+          <div class="rating-row">
+            <h2 class="rating-label">Taste</h2>
+            <app-star-rating
+              class="star-rating-input"
+              (newRating)="setRatingControl($event, 'tasteRatingControl')"
+              [readonly]="false"
+            ></app-star-rating>
+          </div>
+
+          <div class="rating-row">
+            <h2 class="rating-label">Presentation</h2>
+            <app-star-rating
+              class="star-rating-input"
+              (newRating)="setRatingControl($event, 'presentationRatingControl')"
+              [readonly]="false"
+            ></app-star-rating>
+          </div>
+        </div>
+
+        <!-- Tag Input -->
+        <mat-form-field>
+          <mat-label>Tags</mat-label>
+          <mat-chip-grid #tagChipGrid aria-label="drink tags" formControlName="tagControl">
+            @for (tag of selectedTags(); track $index) {
+              <mat-chip-row (removed)="removeTag(tag)">
+                {{ tag }}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip-row>
+            }
+            <input
+              name="currentTag"
+              placeholder="Add a tag..."
+              #tagInput
+              formControlName="tagInputControl"
+              [matChipInputFor]="tagChipGrid"
+              [matAutocomplete]="tagAuto"
+              [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+              (matChipInputTokenEnd)="addTag($event); tagInput.value = ''"
+            />
+            <mat-autocomplete
+              #tagAuto="matAutocomplete"
+              (optionSelected)="autocompleteTagSelected($event); tagInput.value = ''"
+            >
+              @for (tag of filteredTags(); track tag.id) {
+                <mat-option [value]="tag.name">{{ tag.name }}</mat-option>
+              }
+            </mat-autocomplete>
+          </mat-chip-grid>
+        </mat-form-field>
+
+        <!-- Image Input -->
+        <div class="image-section">
+          <h1>Show Us The Drink!</h1>
+          <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" hidden />
+
+          @if (!filePreviewUrl) {
+            <button type="button" mat-stroked-button color="primary" (click)="fileInput.click()">
+              Upload Picture
+            </button>
+          } @else {
+            <div class="preview-wrapper">
+              <img [src]="filePreviewUrl" alt="Preview" class="preview-image" />
+              <button
+                type="button"
+                class="remove-image-btn"
+                matMiniFab
+                color="error"
+                (click)="removeImage()"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+      }
+
+      <div class="form-submit-section">
+        <button matButton="outlined" type="submit" [disabled]="!ratingForm.valid">
+          Submit Rating
+        </button>
+      </div>
+    </form>
+
+    @if (duplicateDrinkReview()) {
+      <app-error-container [errorMessage]="duplicateDrinkErrorMessage"></app-error-container>
     }
-
-    <div class="form-submit-section">
-      <button matButton="outlined" type="submit" [disabled]="!ratingForm.valid">
-        Submit Rating
-      </button>
-    </div>
-  </form>
-
-  @if(duplicateDrinkReview()) {
-  <app-error-container [errorMessage]="duplicateDrinkErrorMessage"></app-error-container>
-  } }
+    @if (fileUploadError()) {
+      <app-error-container [errorMessage]="fileUploadErrorMessage"></app-error-container>
+    }
+  }
 </div>

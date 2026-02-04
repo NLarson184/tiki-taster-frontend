@@ -24,6 +24,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BarService } from '../services/bar-service';
 import { DrinkService } from '../services/drink-service';
+import { MediaService } from '../services/media-service';
 import { Bar } from '../models/bar';
 import {
   BehaviorSubject,
@@ -47,7 +48,7 @@ import {
 import { Tag } from '../models/tag';
 import { TagService } from '../services/tag-service';
 import { COMMA, ENTER, P } from '@angular/cdk/keycodes';
-import { MatAnchor, MatButton } from '@angular/material/button';
+import { MatAnchor, MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { NewRating } from '../models/rating';
 import { RatingService } from '../services/rating-service';
@@ -78,6 +79,7 @@ import { ErrorContainer } from '../common/error-container/error-container';
     RouterLink,
     BarInput,
     ErrorContainer,
+    MatMiniFabButton,
   ],
   templateUrl: './add-rating.html',
   styleUrl: './add-rating.scss',
@@ -87,12 +89,16 @@ export class AddRating implements OnInit {
   drinkService = inject(DrinkService);
   tagService = inject(TagService);
   ratingService = inject(RatingService);
+  mediaService = inject(MediaService);
 
   barList$: Observable<Bar[]>;
   drinkList$: Observable<Drink[]>;
   tagList$: BehaviorSubject<Tag[]> = new BehaviorSubject<Tag[]>([]);
 
   formComplete = signal(false);
+
+  selectedFile: File | null = null;
+  filePreviewUrl: string | ArrayBuffer | null = null;
 
   // Form Controls
   ratingForm = new FormGroup({
@@ -130,11 +136,13 @@ export class AddRating implements OnInit {
   // Error States
   duplicateDrinkReview = signal(false);
   duplicateDrinkErrorMessage = "Sorry! You can't rate the same drink at a bar more than once.";
+  fileUploadError = signal(false);
+  fileUploadErrorMessage = 'There was an issue uploading your image.  Try again!';
 
   constructor(private cd: ChangeDetectorRef) {
     // When the bar is selected, load the known drinks at this bar
     this.drinkList$ = this.selectedBarForDrinkList$.pipe(
-      switchMap((placeId: string) => this.barService.getDrinksAtBar(placeId))
+      switchMap((placeId: string) => this.barService.getDrinksAtBar(placeId)),
     );
 
     this.barList$ = this.barService.getAllBars();
@@ -144,6 +152,11 @@ export class AddRating implements OnInit {
   }
 
   ngOnInit() {}
+
+  clearErrors() {
+    this.duplicateDrinkReview.set(false);
+    this.fileUploadError.set(false);
+  }
 
   onBarSelected(selectedBar: BarSearchResult): void {
     // Enable the input since we have a bar now
@@ -192,8 +205,28 @@ export class AddRating implements OnInit {
     event.option.deselect();
   }
 
+  onFileSelected(event: any) {
+    const file = event.target.files?.[0];
+
+    if (file) {
+      this.selectedFile = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.filePreviewUrl = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeImage() {
+    this.selectedFile = null;
+    this.filePreviewUrl = null;
+  }
+
   submitForm() {
     let barObject = this.ratingForm.get('barControl')!.value!;
+
     // Create a new rating object
     const newRating: NewRating = {
       bar_id: barObject.fsq_place_id!,
@@ -204,13 +237,30 @@ export class AddRating implements OnInit {
       taste_rating: this.ratingForm.get('tasteRatingControl')?.value ?? undefined,
       presentation_rating: this.ratingForm.get('presentationRatingControl')?.value ?? undefined,
       tag_list: this.ratingForm.get('tagControl')!.value ?? [],
+      image_url: null,
     };
 
-    // this.formOutput.set(JSON.stringify(newRating, null, 2));
+    if (this.selectedFile) {
+      this.mediaService.uploadImage(this.selectedFile).subscribe({
+        next: (result) => {
+          newRating.image_url = result.secure_url;
+          this.saveRating(newRating);
+        },
+        error: (error) => {
+          this.clearErrors();
+          this.fileUploadError.set(true);
+        },
+      });
+    } else {
+      this.saveRating(newRating);
+    }
+  }
 
+  private saveRating(newRating: NewRating) {
     this.ratingService.createRating(newRating).subscribe({
       complete: () => this.formComplete.set(true),
       error: (error: HttpErrorResponse) => {
+        this.clearErrors();
         var errorDetail: string = error.error.detail.toString();
         console.log(errorDetail);
         if (errorDetail == 'Duplicate drink/bar combo.') {

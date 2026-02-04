@@ -13,10 +13,12 @@ import { StarRating } from '../../star-rating/star-rating';
 import { DrinkService } from '../../../services/drink-service';
 import { TagDisplay } from '../../tag-display/tag-display';
 import { RouterLink } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-drink-detail-dialog',
-  imports: [StarRating, TagDisplay, RouterLink],
+  imports: [StarRating, TagDisplay, RouterLink, MatIcon, MatButtonModule],
   templateUrl: './drink-detail-dialog.html',
   styleUrl: './drink-detail-dialog.scss',
 })
@@ -31,6 +33,8 @@ export class DrinkDetailDialog implements OnInit {
   taste_rating: number | null;
   presentation_rating: number | null;
 
+  currentImageIndex = 0;
+
   constructor() {
     this.drink = <Drink>this.data.drink;
     this.barLinkActive = <boolean>this.data.barLinkActive;
@@ -40,6 +44,15 @@ export class DrinkDetailDialog implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  nextImage() {
+    this.currentImageIndex = (this.currentImageIndex + 1) % this.drink.image_urls.length;
+  }
+
+  prevImage() {
+    this.currentImageIndex =
+      (this.currentImageIndex - 1 + this.drink.image_urls.length) % this.drink.image_urls.length;
+  }
 
   closeDialog() {
     this.dialogRef.close();

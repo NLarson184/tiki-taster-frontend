@@ -1,40 +1,58 @@
 <div class="dialog-container">
   <div class="header">
     <h1 mat-dialog-title>{{ drink.name }}</h1>
-    @if(!!barLinkActive) {
-    <h4>
-      <a matButton [routerLink]="['bars', drink.bar.id]" (click)="closeDialog()">
-        @ {{ drink.bar.name }}
-      </a>
-    </h4>
+    @if (!!barLinkActive) {
+      <h4>
+        <a matButton [routerLink]="['bars', drink.bar.id]" (click)="closeDialog()">
+          @ {{ drink.bar.name }}
+        </a>
+      </h4>
     } @else {
-    <h4>@ {{ drink.bar.name }}</h4>
+      <h4>@ {{ drink.bar.name }}</h4>
     }
   </div>
 
+  <!-- Images -->
+  @if (drink.image_urls != null && drink.image_urls.length > 0) {
+    <div class="image-carousel">
+      <img class="drink-image" [src]="drink.image_urls[currentImageIndex]" [alt]="drink.name" />
+      @if (drink.image_urls.length > 0) {
+        <div class="image-progression-section">
+          <button matIconButton (click)="prevImage()"><mat-icon>chevron_left</mat-icon></button>
+          <div class="image-counter">
+            {{ currentImageIndex + 1 }} / {{ drink.image_urls.length }}
+          </div>
+          <button matIconButton (click)="nextImage()"><mat-icon>chevron_right</mat-icon></button>
+        </div>
+      }
+    </div>
+  }
+
   <!-- Ratings -->
-  @if(overall_rating) {
-  <div class="user-ratings-section drink-card-section">
-    <span class="drink-card-section-headline">Overall:</span>
-    <app-star-rating [readonly]="true" [rating]="overall_rating"></app-star-rating>
-  </div>
-  } @if(taste_rating) {
-  <div class="user-ratings-section drink-card-section">
-    <span class="drink-card-section-headline">Taste:</span>
-    <app-star-rating [readonly]="true" [rating]="taste_rating"></app-star-rating>
-  </div>
-  } @if(presentation_rating) {
-  <div class="user-ratings-section drink-card-section">
-    <span class="drink-card-section-headline">Presentation:</span>
-    <app-star-rating [readonly]="true" [rating]="presentation_rating"></app-star-rating>
-  </div>
+  @if (overall_rating) {
+    <div class="user-ratings-section drink-card-section">
+      <span class="drink-card-section-headline">Overall:</span>
+      <app-star-rating [readonly]="true" [rating]="overall_rating"></app-star-rating>
+    </div>
+  }
+  @if (taste_rating) {
+    <div class="user-ratings-section drink-card-section">
+      <span class="drink-card-section-headline">Taste:</span>
+      <app-star-rating [readonly]="true" [rating]="taste_rating"></app-star-rating>
+    </div>
+  }
+  @if (presentation_rating) {
+    <div class="user-ratings-section drink-card-section">
+      <span class="drink-card-section-headline">Presentation:</span>
+      <app-star-rating [readonly]="true" [rating]="presentation_rating"></app-star-rating>
+    </div>
   }
 
   <!-- Tags Section -->
-  @if(drink.tags.length > 0) {
-  <div class="tag-section drink-card-section">
-    <span class="drink-card-section-headline">Tags:</span>
-    <app-tag-display [tagList]="drink.tags"></app-tag-display>
-  </div>
+  @if (drink.tags.length > 0) {
+    <div class="tag-section drink-card-section">
+      <span class="drink-card-section-headline">Tags:</span>
+      <app-tag-display [tagList]="drink.tags"></app-tag-display>
+    </div>
   }
 </div>

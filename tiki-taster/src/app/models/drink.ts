@@ -8,6 +8,7 @@ export interface Drink {
   bar: Bar;
   ratings: Rating[];
   tags: Tag[];
+  image_urls: string[];
 
   // Aggregated Fields from back-end.
   average_overall_rating: number | null;

@@ -31,6 +31,29 @@
   font-weight: bold;
 }
 
+.image-carousel {
+  display: flex;
+
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.drink-image {
+  border-radius: 15px;
+}
+
+.image-progression-section {
+  display: flex;
+
+  align-items: center;
+  flex-direction: row;
+}
+
+.image-counter {
+  margin: 0px 5px;
+}
+
 .user-ratings-section {
   display: flex;
 

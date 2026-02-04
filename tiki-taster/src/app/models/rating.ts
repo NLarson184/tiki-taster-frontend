@@ -18,4 +18,5 @@ export interface NewRating {
   taste_rating: number | undefined;
   presentation_rating: number | undefined;
   tag_list: string[];
+  image_url: string | null;
 }
