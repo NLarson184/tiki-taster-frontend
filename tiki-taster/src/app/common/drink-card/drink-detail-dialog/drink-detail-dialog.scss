@@ -40,7 +40,14 @@
 }
 
 .drink-image {
+  width: 300px;
   border-radius: 15px;
+}
+
+.drink-image img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .image-progression-section {

@@ -1,0 +1,35 @@
+<div class="page-container">
+  <h1 class="page-header">Manifesting your Perfect Tiki Crawl</h1>
+  <div class="account-ratings-section">
+    <h2>Your Previous Ratings</h2>
+    @if (accountRatingList$ | async; as accountRatingList) {
+      @if (accountRatingList.length > 0) {
+        <table mat-table [dataSource]="accountRatingList">
+          <ng-container matColumnDef="drink">
+            <th mat-header-cell *matHeaderCellDef>Drink</th>
+            <td mat-cell *matCellDef="let element">{{ element.drink.name }}</td>
+          </ng-container>
+          <ng-container matColumnDef="bar">
+            <th mat-header-cell *matHeaderCellDef>Bar</th>
+            <td mat-cell *matCellDef="let element">
+              <a matButton [routerLink]="['/bars', element.bar.id]">
+                {{ element.bar.name }}
+              </a>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="overall_rating">
+            <th mat-header-cell *matHeaderCellDef>Rating</th>
+            <td mat-cell *matCellDef="let element">{{ element.overall_rating }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="accountRatingDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: accountRatingDisplayedColumns"></tr>
+        </table>
+      } @else {
+        <p>No ratings for this account. Try adding one!</p>
+      }
+    } @else {
+      <p>Loading Ratings...</p>
+    }
+  </div>
+</div>

@@ -22,12 +22,12 @@
         }
       </mat-toolbar-row>
       <mat-toolbar-row>
-        @if (currentLink() == '/my-ratings') {
-          <a matButton="filled" class="link-active"> My Ratings </a>
+        @if (currentLink() == '/my-lists') {
+          <a matButton="filled" class="link-active"> My Lists </a>
         } @else if (isLoggedIn()) {
-          <a matButton routerLink="my-ratings"> My Ratings </a>
+          <a matButton routerLink="my-lists"> My Lists </a>
         } @else {
-          <a matButton (click)="openLoginDialog()"> My Ratings </a>
+          <a matButton (click)="openLoginDialog()"> My Lists </a>
         }
       </mat-toolbar-row>
     </mat-toolbar>

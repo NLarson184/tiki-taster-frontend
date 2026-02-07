@@ -17,6 +17,10 @@ export class RatingService {
     return this.http.get<Rating[]>(`${this.baseUrl}/ratings`);
   }
 
+  getAccountRatings(): Observable<Rating[]> {
+    return this.http.get<Rating[]>(`${this.baseUrl}/ratings/mine`);
+  }
+
   createRating(newRating: NewRating): Observable<any> {
     // This is also enforced on the back-end
     if (!this.authStore.isAuthenticated) {

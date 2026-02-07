@@ -5,6 +5,7 @@ import { Bar } from '../models/bar';
 import { DrinkCard } from '../common/drink-card/drink-card';
 import { Drink } from '../models/drink';
 import { DrinkService } from '../services/drink-service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-bar',
@@ -32,13 +33,16 @@ export class BarComponent {
     }
 
     // Get the basic details of the bar
-    this.barService.getBarDetails(barId).subscribe((bar) => {
-      this.barDetails.set(bar);
-    });
+    this.barService.getBarDetails(barId).subscribe({
+      next: (bar) => {
+        this.barDetails.set(bar);
 
-    // Get the drink list for this bar
-    this.barService.getDrinksAtBar(barId).subscribe((drinks) => {
-      this.drinksAtBar.set(drinks);
+        // Get the list of drinks at this bar
+        this.barService.getDrinksAtBar(bar.foursquare_place_id).subscribe((drinks) => {
+          this.drinksAtBar.set(drinks);
+        });
+      },
+      error: (error: HttpErrorResponse) => {},
     });
   }
 }
