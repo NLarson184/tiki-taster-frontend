@@ -7,38 +7,48 @@
     <mat-toolbar>
       <mat-toolbar-row>
         <span>
-          @if(currentLink() == '/') {
-          <a matButton="filled" class="link-active"> Home </a>
+          @if (currentLink() == '/') {
+            <a matButton="filled" class="link-active"> Home </a>
           } @else {
-          <a matButton routerLink=""> Home </a>
+            <a matButton routerLink=""> Home </a>
           }
         </span>
       </mat-toolbar-row>
       <mat-toolbar-row>
-        @if(currentLink() == '/search') {
-        <a matButton="filled" class="link-active"> Search </a>
+        @if (currentLink() == '/search') {
+          <a matButton="filled" class="link-active"> Search </a>
         } @else {
-        <a matButton routerLink="search"> Search </a>
+          <a matButton routerLink="search"> Search </a>
+        }
+      </mat-toolbar-row>
+      <mat-toolbar-row>
+        @if (currentLink() == '/my-ratings') {
+          <a matButton="filled" class="link-active"> My Ratings </a>
+        } @else if (isLoggedIn()) {
+          <a matButton routerLink="my-ratings"> My Ratings </a>
+        } @else {
+          <a matButton (click)="openLoginDialog()"> My Ratings </a>
         }
       </mat-toolbar-row>
     </mat-toolbar>
   </div>
 
   <div class="review-button">
-    @if(isLoggedIn() && currentLink() == '/add-rating') {
-    <a matButton="filled" disabled>Add a Rating</a>
-    } @else if(isLoggedIn() && currentLink() != '/add-rating') {
-    <a matButton="filled" routerLink="add-rating">Add a Rating</a>
+    @if (isLoggedIn() && currentLink() == '/add-rating') {
+      <a matButton="filled" disabled>Add a Rating</a>
+    } @else if (isLoggedIn() && currentLink() != '/add-rating') {
+      <a matButton="filled" routerLink="add-rating">Add a Rating</a>
     } @else {
-    <a matButton="filled" disabled>Add a Rating</a> }
+      <a matButton="filled" disabled>Add a Rating</a>
+    }
   </div>
 
   <div class="footer">
-    @if(isLoggedIn()) {
-    <span>Welcome, {{ userFirstName() }}</span>
-    <button matButton (click)="openLogoutDialog()">Log Out</button>
+    @if (isLoggedIn()) {
+      <span>Welcome, {{ userFirstName() }}</span>
+      <button matButton (click)="openLogoutDialog()">Log Out</button>
     } @else {
-    <button matButton="elevated" (click)="openLoginDialog()">Login</button>
+      <button matButton="elevated" (click)="openLoginDialog()">Login</button>
     }
   </div>
 </div>
